@@ -11,13 +11,16 @@ import UIKit
 
 class CircularProgressBar: UIView {
     
+    var currentProgress = 0
+    
     //MARK: awakeFromNib
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupView()
-        label.text = "0"
+        label.text = "\(currentProgress)"
     }
+    
     
     //MARK: Public
     
@@ -69,7 +72,10 @@ class CircularProgressBar: UIView {
             } else {
                 currentTime += 0.05
                 let percent = currentTime/2 * 100
-                self.label.text = "\(Int(progress * percent))"
+                
+                self.currentProgress = Int(progress * percent)
+                
+                self.label.text = "\(self.currentProgress)%"
                 
                 self.setForegroundLayerColorForSafePercent()
                 self.configLabel()
@@ -140,13 +146,16 @@ class CircularProgressBar: UIView {
     
     private func setForegroundLayerColorForSafePercent(){
         
-        let percent = Int(label.text!)!
+        let percent = currentProgress
         
         if percent > 0 && percent < 100 {
             
-            self.backgroundLayer.fillColor = UIColor.clear.cgColor
             self.backgroundLayer.strokeColor = UIColor.clear.cgColor
             self.label.textColor = .orange
+            
+        }
+        else {
+            self.backgroundLayer.strokeColor = UIColor(red: CGFloat(105/255.0), green: CGFloat(105/255.0), blue: CGFloat(105/255.0), alpha: 0.85).cgColor
         }
     }
     
